@@ -1,0 +1,61 @@
+<div class="container">
+
+	<div class="rep-detail">
+
+		<div class="rep-detail__header">
+			<h1 ng-bind="detail.name"></h1>
+			<h2><span ng-bind="detail.chamber"></span> - <a ng-href="#/{{detail.summary.state}}"><span ng-bind="detail.summary.state"></span></a></h2>
+			<div class="rep-detail__party" ng-class="{ 'party-rep': (detail.summary['party'] === 'R'), 'party-dem': (detail.summary['party'] === 'D'), 'party-ind': (detail.summary['party'] === 'I') }">
+				<span ng-bind="detail.party"></span>
+			</div>
+		</div>
+
+		<div class="rep-detail__cycle-finances">
+			<h3>Finances for <span ng-bind="detail.summary.cycle"></span> Cycle</h3>
+
+			<div class="finance">
+				<p class="finance__header">Total Raised</p>
+				<p class="finance__figure money--green" ng-bind="(detail.summary.total | currency)"></p>
+			</div>
+			<div class="finance">
+				<p class="finance__header">Total Spent</p>
+				<p class="finance__figure" ng-bind="(detail.summary.spent | currency)"></p>
+			</div>
+			<div class="finance">
+				<p class="finance__header">Cash on Hand</p>
+				<p class="finance__figure" ng-bind="(detail.summary.cash_on_hand | currency)"></p>
+			</div>
+			<div class="finance">
+				<p ng-show="detail.hasDebt" class="finance__header">Debt</p>
+				<p ng-show="detail.hasDebt" class="finance__figure finance__figure--debt" ng-bind="(detail.summary.debt | currency)"></p>
+			</div>
+		</div>
+
+		<div class="rep-detail__industry">
+
+			<h3>Top 10 Industries Contributing to <span ng-bind="detail.name"></span></h3>
+			<div class="industry-key">
+				<h4>Bars show the amount contributed by:</h4>
+				<div class="progress">
+					<div class="progress-bar progress-bar-success" style="width: 50%">
+						<span class="sr-only">35% Complete (success)</span>
+						<span>PACs</span>
+					</div>
+					<div class="progress-bar progress-bar-warning" style="width: 50%">
+						<span class="sr-only">20% Complete (warning)</span>
+						<span>Individuals</span>
+					</div>
+				</div>
+			</div>
+			<div rep-detail-industry></div>
+		
+		</div>
+
+		<div class="rep-detail__links">
+			<h3>More Information</h3>
+			<a ng-href="https://www.google.com/search?q={{detail.name}}&sitesearch=OnTheIssues.org"><span ng-bind="detail.name"></span> On The Issues</a>
+		</div>
+	</div>
+
+
+</div>

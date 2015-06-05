@@ -1,0 +1,14 @@
+<div class="container">
+	<div class="hero">
+		<h1>Know Your Representatives</h1>
+		<h2>Select a State</h2>
+		<div map-widget state="state"></div>
+		<h3 ng-show="state">Showing Reps from the state of <span ng-bind="list.stateName"></span></h3>
+	</div>
+	<div class="rep-list">
+		<div rep-panel></div>
+		<div class="os-logo" ng-show="(list.reps.length > 0)">
+			<a href="http://www.opensecrets.org/"><img src="img/open-secrets-logo.gif" alt="Data Provided by opensecrets.org"></a>
+		</div>
+	</div>
+</div>

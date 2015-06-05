@@ -1,0 +1,25 @@
+<div class="rep-panel" ng-repeat="rep in list.reps">
+	<div class="rep-panel__container">
+	
+		<div class="rep-panel__party" ng-class="{ 'party-rep': (rep['@attributes']['party'] === 'R'), 'party-dem': (rep['@attributes']['party'] === 'D'), 'party-ind': (rep['@attributes']['party'] === 'I') }">
+			<span ng-bind="rep['@attributes']['party']"></span>
+		</div>
+
+	    <h1 class="rep-panel__name" >
+	    	<span ng-bind="panel.parseOffice.getTitle(rep['@attributes']['office'])">Office</span>
+	    	<span ng-bind="rep['@attributes']['firstlast']">Office</span>
+		</h1>
+
+	    <h2 class="rep-panel__district">
+	    	<span ng-show="panel.rep">District <span ng-bind="panel.parseOffice.getDistrict(rep['@attributes']['office'])"></span></span>
+	    </h2>
+
+	    <div class="rep-panel__contact">
+	    	<p>Phone: <span ng-bind="rep['@attributes']['phone']"></span></p>
+	    	<p>Website: <a ng-href="{{rep['@attributes']['website']}}" ng-bind="rep['@attributes']['website']"></a></p>
+	    </div>
+    </div>
+	<div>
+	    <a class="rep-panel__finance-link" href class="" ng-href="#/rep/{{rep['@attributes']['cid']}}">Follow the Money</a>
+    </div>
+</div>
