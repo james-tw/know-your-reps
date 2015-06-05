@@ -8,8 +8,14 @@ body {
 .container {
   padding: 0; }
 
+.progress-bar__pacs {
+  background: #26AD4A; }
+
+.progress-bar__indivs {
+  background: #FDB159; }
+
 .money--green {
-  color: #61A073; }
+  color: #26AD4A; }
 
 #map {
   margin: 0 auto; }
@@ -71,9 +77,9 @@ body {
         -ms-flex-pack: center;
             justify-content: center; }
     .rep-panel__party.party-rep {
-      background: tomato; }
+      background: #FD6C59; }
     .rep-panel__party.party-dem {
-      background: #4972B9; }
+      background: #3D80A0; }
     .rep-panel__party.party-ind {
       background: #8467BE; }
     .rep-panel__party span {
@@ -144,9 +150,9 @@ body {
         -ms-flex-pack: end;
             justify-content: flex-end; }
     .rep-detail__party.party-rep {
-      background: tomato; }
+      background: #FD6C59; }
     .rep-detail__party.party-dem {
-      background: #4972B9; }
+      background: #3D80A0; }
     .rep-detail__party.party-ind {
       background: #8467BE; }
     .rep-detail__party span {
@@ -218,7 +224,7 @@ body {
   .finance__figure {
     font-size: 2em; }
     .finance__figure--debt {
-      color: tomato; }
+      color: #FD6C59; }
 
 .industry:not(:last-of-type) {
   border-bottom: 1px solid #dcdcdc;

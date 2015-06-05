@@ -1,3 +1,5 @@
+// COLORS: http://paletton.com/#uid=7050y0kkOvOaXOugpEtp1t1s-nN
+
 body {
 	font-family: "Roboto", sans-serif;
 
@@ -10,9 +12,12 @@ body {
 
 .container { padding: 0 }
 
+.progress-bar__pacs { background: #26AD4A; }
+.progress-bar__indivs { background: #FDB159; }
+
 .money {
 		&--green {
-		color: #61A073;
+		color: #26AD4A;
 	}
 }
 
@@ -80,10 +85,10 @@ body {
 		justify-content: center;
 
 		&.party-rep {
-			background: tomato;
+			background: #FD6C59;
 		}
 		&.party-dem {
-			background: #4972B9;
+			background: #3D80A0;
 		}
 		&.party-ind {
 			background: #8467BE;
@@ -176,10 +181,10 @@ body {
 		justify-content: flex-end;
 
 		&.party-rep {
-			background: tomato;
+			background: #FD6C59;
 		}
 		&.party-dem {
-			background: #4972B9;
+			background: #3D80A0;
 		}
 		&.party-ind {
 			background: #8467BE;
@@ -290,7 +295,7 @@ body {
 
 
 		&--debt {
-			color: tomato;
+			color: #FD6C59;
 		}
 	}
 }

@@ -15,7 +15,7 @@
 	<p>Industry percent compared to largest industry: {{ind['@attributes']['total'] / detail.industries[0]['@attributes']['total']*100 + '%'}}</p>
  -->
 	<div class="industry__bar progress" ng-style="{'width': ind['@attributes']['total'] / detail.industries[0]['@attributes']['total']*100 + '%'}">
-		<div class="progress-bar progress-bar-success"
+		<div class="progress-bar progress-bar__pacs"
 			 role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"
 		 	 ng-style="{'width': (ind['@attributes']['pacs'] / ind['@attributes']['total'])*100 + '%'}">
 			<div ng-hide="(ind['@attributes']['pacs'] / ind['@attributes']['total']) <= .09">			 	
@@ -24,7 +24,7 @@
 		 	</div>
 			<span class="sr-only">% from PACs</span>
 		</div>
-		<div class="progress-bar progress-bar-warning"
+		<div class="progress-bar progress-bar__indivs"
 			 role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"
 		 	 ng-style="{'width': (ind['@attributes']['indivs'] / ind['@attributes']['total'])*100 + '%'}">
 			<div ng-hide="(ind['@attributes']['indivs'] / ind['@attributes']['total']) <= .09">			 	

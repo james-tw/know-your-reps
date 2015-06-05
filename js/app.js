@@ -132,8 +132,8 @@ function mapWidget (){
         },
 		link: function(scope, elem, attrs) {
 			$('#map').usmap({
-				stateStyles: {fill: '#85B9CF'},
-				stateHoverStyles: {fill: '#EF594A'},
+				stateStyles: {fill: '#ADE5C0'},
+				stateHoverStyles: {fill: '#FFC279'},
 				stateHoverAnimation: 180,
 				click: function(event, data) {
 					//TODO: Update to just change the URL param, which will be the trigger to 
@@ -145,7 +145,7 @@ function mapWidget (){
 						$(this).css('fill', '');
 					});
 
-					$('#' + data.name).css('fill', '#EF594A');
+					$('#' + data.name).css('fill', '#FFC279');
 
 				}
 			});
