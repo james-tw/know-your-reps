@@ -1,5 +1,6 @@
 // COLORS: http://paletton.com/#uid=7050y0kkOvOaXOugpEtp1t1s-nN
 
+
 body {
 	font-family: "Roboto", sans-serif;
 
@@ -16,17 +17,35 @@ body {
 .progress-bar__indivs { background: #FDB159; }
 
 .money {
-		&--green {
+	&--green {
 		color: #26AD4A;
 	}
 }
 
 #map {
 	margin: 0 auto;
+	max-width: 100%;
+
+	@media screen and (max-width: 480px) {
+		display: none;
+	}
+
 }
 
 .hero {
 	text-align: center;
+
+	&__select-header {
+		font-size: 2em;
+	}
+
+	&__select-dropdown {
+		border: 1px solid #C7D3DD;
+		background: none;
+		padding: 1em 0px;
+		margin-top: -3px;
+		// font-size: 1em;
+	}
 }
 
 .os-logo {
@@ -44,8 +63,6 @@ body {
 	display: flex;
 	-webkit-flex-flow: row wrap;
 	justify-content: flex-start;
-
-
 }
 
 .rep-panel {
@@ -143,6 +160,7 @@ body {
 	.progress {
 		height: 2em;
 		margin-bottom: 10px;
+
 		.progress-bar {
 			font-size: 1em;
 			line-height: 2em;
@@ -221,7 +239,6 @@ body {
 	}
 
 	&__industry {
-
 		padding: 2rem;
 		border-top: 1px solid whitesmoke;
 
@@ -237,7 +254,6 @@ body {
 	&__links {
 		padding: 2rem;
 		border-top: 1px solid whitesmoke;
-
 	}
 
 	.industry-key {
@@ -292,7 +308,6 @@ body {
 	}
 	&__figure {
 		font-size: 2em;
-
 
 		&--debt {
 			color: #FD6C59;

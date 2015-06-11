@@ -1,12 +1,12 @@
 (function(){
 
 angular.module('congressApp', ['ngRoute'])
-	.directive('mapWidget', mapWidget)
+	.directive('mapWidget', ['$timeout', mapWidget])
 	.directive('repList', repList)
 	.directive('repPanel', repPanel)
 	.directive('repDetailIndustry', repDetailIndustry)
 	.factory('openSecrets', openSecrets)
-	.controller('ListCtrl', ['$scope', '$routeParams', '$location', 'openSecrets', ListCtrl])
+	.controller('ListCtrl', ['$scope', '$route', '$routeParams', '$location', 'openSecrets', ListCtrl])
 	.controller('DetailCtrl', ['$scope', 'openSecrets', '$routeParams', DetailCtrl])
 	.config(routeConfig)
 	;
@@ -41,13 +41,16 @@ function routeConfig($routeProvider, $httpProvider) {
 function openSecrets ($http) {
 
 	var key = 'e083ad78821ccd23756c34c26b0713ff';
+	var states = {
+		"AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming"
+	}
 
 	function getStateName(abbr) {
-		var states = {
-		    "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "DC": "District Of Columbia", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming"
-		}
-
 		return states[abbr];
+	}
+
+	function getStates () {
+		return states;
 	}
 
 
@@ -86,7 +89,8 @@ function openSecrets ($http) {
 		getRepsByState: getRepsByState,
 		getRepSummary: getRepSummary,
 		getRepIndustry: getRepIndustry,
-		getStateName: getStateName
+		getStateName: getStateName,
+		getStates: getStates
 	};
 }
 
@@ -122,7 +126,7 @@ function repDetailIndustry (){
 	};
 }
 
-function mapWidget (){
+function mapWidget ($timeout){
 	return {
 		restrict: 'EA',
 		templateUrl: 'map-widget.html',
@@ -136,10 +140,10 @@ function mapWidget (){
 				stateHoverStyles: {fill: '#FFC279'},
 				stateHoverAnimation: 180,
 				click: function(event, data) {
-					//TODO: Update to just change the URL param, which will be the trigger to 
-					//		update the list. Currently updates twice.
 					scope.state = data.name;
-					scope.$apply();
+					$timeout(function() {
+						scope.$apply();
+					})
 
 					$("#map > svg > path").each(function(){
 						$(this).css('fill', '');
@@ -151,36 +155,50 @@ function mapWidget (){
 			});
 			
 		},
-		controller: function($routeParams, $timeout) {
-			// If RouteParams has a stateId, click that state to highlight it.
-			$timeout(function(){
-				var stateId = $routeParams.stateId;
-				if (stateId) { $('[data-hit=' + stateId + ']').trigger('click'); }
-			}, 1)
-			
-			
+		controller: function($scope, $routeParams, $timeout) {
+
+			$scope.$watch('state', function(val) {
+				$('[data-hit=' + val + ']').trigger('click');
+			});
+
 		}
 	};
 }
 
 
 // CONTROLLERS
-function ListCtrl($scope, $routeParams, $location, openSecrets) {
+function ListCtrl($scope, $route, $routeParams, $location, openSecrets) {
 	var self = this;
 
 	$scope.state = $routeParams.stateId;
+
 	self.query = '';
 	self.reps = [];
-
-	self.stateName = openSecrets.getStateName($scope.state);
+	self.states = openSecrets.getStates();
 
 	$scope.$watch('state', function(val) {
 		if (typeof val !== 'undefined') {
+			// Update full name of state
+			self.stateName = openSecrets.getStateName($scope.state);
+
+			// Updates list of congresspersons.
 			updateList(val);
-			$location.path('/' + val);			
+			
+			// Changes URL path but doesn't refresh the page.
+			$location.path('/' + val);
 		}
 
 	});
+
+	// Prevents page refreshing when state change updates URL. Description below.
+	// Angular watches for a location change (whether it’s accomplished through typing in the location bar, clicking a link or setting the location through  $location.path()). When it senses this change, it broadcasts an event, $locationChangeSuccess, and begins the routing process. What we do is capture the event and reset the route to what it was previously. http://stackoverflow.com/questions/12422611/angularjs-paging-with-location-path-but-no-ngview-reload
+	var lastRoute = $route.current;
+    $scope.$on('$locationChangeSuccess', function(event, next, current) {
+    	// If we're not going to a rep detail page, don't refresh.
+    	if ($location.path().indexOf('rep') === -1) {
+	        $route.current = lastRoute;
+    	}
+    });
 
 	function updateList(state_id){
 		if (state_id) {
@@ -190,6 +208,10 @@ function ListCtrl($scope, $routeParams, $location, openSecrets) {
 			});
 		}
 	}	
+
+	function updateState() {
+		$scope.state = selectedState;
+	}
 
 	// self.clearSearch = clearSearch;
 
@@ -244,7 +266,7 @@ function DetailCtrl($scope, openSecrets, $routeParams) {
 	function reverseName(name) {
 		var namePieces = name.split(' ');
 
-		if (namePieces[namePieces.length - 1] == "Jr" || namePieces[namePieces.length - 1] == "Sr") {
+		if (namePieces[namePieces.length - 1] === "Jr" || namePieces[namePieces.length - 1] === "Sr") {
 			var suffix = namePieces.pop();
 		}
 

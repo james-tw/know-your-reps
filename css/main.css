@@ -18,10 +18,21 @@ body {
   color: #26AD4A; }
 
 #map {
-  margin: 0 auto; }
+  margin: 0 auto;
+  max-width: 100%; }
+  @media screen and (max-width: 480px) {
+    #map {
+      display: none; } }
 
 .hero {
   text-align: center; }
+  .hero__select-header {
+    font-size: 2em; }
+  .hero__select-dropdown {
+    border: 1px solid #C7D3DD;
+    background: none;
+    padding: 1em 0px;
+    margin-top: -3px; }
 
 .os-logo {
   width: 100%;
