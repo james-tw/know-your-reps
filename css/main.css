@@ -87,11 +87,11 @@ body {
     -webkit-justify-content: center;
         -ms-flex-pack: center;
             justify-content: center; }
-    .rep-panel__party.party-rep {
+    .rep-panel__party.party-R {
       background: #FD6C59; }
-    .rep-panel__party.party-dem {
+    .rep-panel__party.party-D {
       background: #3D80A0; }
-    .rep-panel__party.party-ind {
+    .rep-panel__party.party-I {
       background: #8467BE; }
     .rep-panel__party span {
       font-size: 1.25em;
@@ -160,11 +160,11 @@ body {
     -webkit-justify-content: flex-end;
         -ms-flex-pack: end;
             justify-content: flex-end; }
-    .rep-detail__party.party-rep {
+    .rep-detail__party.party-R {
       background: #FD6C59; }
-    .rep-detail__party.party-dem {
+    .rep-detail__party.party-D {
       background: #3D80A0; }
-    .rep-detail__party.party-ind {
+    .rep-detail__party.party-I {
       background: #8467BE; }
     .rep-detail__party span {
       font-size: 1em;

@@ -1,7 +1,5 @@
-
-
 // DIRECTIVES
-function repList (openSecrets){
+function repList (){
 	return {
 		restrict: 'EA',
 		templateUrl: 'partials/rep-list.html',
@@ -39,20 +37,20 @@ function mapWidget ($timeout){
 				stateHoverStyles: {fill: '#FFC279'},
 				stateHoverAnimation: 180,
 				click: function(event, data) {
+					// Update the $scope.state based on which state is clicked
 					scope.state = data.name;
 					$timeout(function() {
 						scope.$apply();
 					})
 
+					// Un-color all states, then color the one that was clicked.
 					$("#map > svg > path").each(function(){
 						$(this).css('fill', '');
 					});
-
 					$('#' + data.name).css('fill', '#FFC279');
 
 				}
 			});
-			
 		},
 		controller: function($scope, $routeParams, $timeout) {
 

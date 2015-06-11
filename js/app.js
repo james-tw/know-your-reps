@@ -12,7 +12,6 @@ var repsApp = angular.module('knowYourReps', ['ngRoute'])
 	;
 
 
-
 //ROUTE CONFIG 
 function routeConfig($routeProvider, $httpProvider) {
 
@@ -25,7 +24,7 @@ function routeConfig($routeProvider, $httpProvider) {
 		.when('/rep/:repId', {
 			templateUrl: 'partials/rep-detail.html',
 			controller: 'DetailCtrl',
-			controllerAs: 'detail'
+			controllerAs: 'rep'
 		})
 		.when('/', {
 			templateUrl: 'partials/rep-list.html',
@@ -53,15 +52,78 @@ function openSecrets ($http) {
 		return states;
 	}
 
+	function reverseName(name) {
+		var namePieces = name.split(' ');
+
+		if (namePieces[namePieces.length - 1] === "Jr" || namePieces[namePieces.length - 1] === "Sr") {
+			var suffix = namePieces.pop();
+		}
+
+		namePieces = namePieces.join(' ').split(',').reverse();
+
+		if (suffix) { namePieces.push(suffix); }
+
+		return namePieces.join(' ').trim();
+	}
+
+	function getTitle(code) {
+		//Check the office code for S to indicate Senator.
+		if (code.charAt(2) === 'S') {
+			return 'Sen.';
+		} 
+		else {
+			return 'Rep.';
+		}
+	}
+
+	function getDistrict(code) {
+		return parseInt(code.slice(2,4), 10);
+	}
+
+	function getChamber(chamberId) {
+		if (chamberId === "H") {
+			return "Representative"
+		} else if (chamberId === "S") {
+			return "Senator"
+		}
+	}
+
+	function getPartyFull(partyId) {
+		if (partyId === "R") {
+			return "Republican"
+		} else if (partyId === "D") {
+			return "Democrat"
+		} else {
+			return "Independent"
+		}
+	}
+
 
 	function getRepsByState(state, callback) {
 		$http({
 			method: 'GET',
 			url: 'http://www.opensecrets.org/api/?method=getLegislators&output=json&id=' + state + '&apikey=' + key,
-			// headers: headers,
 			cache: true
 		}).success(function(data) {
-			callback(data);
+			var dataList = data.response.legislator, 
+				list = [];
+
+			// Clean up the object, only returning desired attributes of each rep.
+			angular.forEach(dataList, function(item){
+				var rep = {};
+				item = item['@attributes'];
+				rep['party'] = item['party'];
+				rep['office'] = getTitle(item['office']);
+				rep['fullName'] = item['firstlast'];
+				rep['district'] = getDistrict(item['office']);
+				rep['phone'] = item['phone'];
+				rep['website'] = item['website'];
+				rep['cid'] = item['cid'];
+
+				list.push(rep);
+			});
+
+			callback(list);
 		});
 	}
 
@@ -71,7 +133,22 @@ function openSecrets ($http) {
 			url: 'http://www.opensecrets.org/api/?method=candSummary&output=json&cid=' + cid + '&apikey=' + key,
 			cache: true
 		}).success(function(data) {
-			callback(data);
+			var repData = data['response']['summary']['@attributes'],
+				rep = {};
+
+			// Clean up the object, only returning desired attributes of each rep.
+			rep['fullName'] = reverseName(repData['cand_name']);
+			rep['state'] = repData['state'];
+			rep['party'] = repData['party'];
+			rep['partyFull'] = getPartyFull(repData['party']);
+			rep['cycle'] = repData['cycle'];
+			rep['chamber'] = getChamber(repData['chamber']);
+			rep['total'] = repData['total'];
+			rep['spent'] = repData['spent'];
+			rep['cashOnHand'] = repData['cash_on_hand'];
+			rep['debt'] = repData['debt'];
+
+			callback(rep);
 		});
 	}
 
@@ -81,7 +158,23 @@ function openSecrets ($http) {
 			url: 'http://www.opensecrets.org/api/?method=candIndustry&output=json&cid=' + cid + '&apikey=' + key,
 			cache: true
 		}).success(function(data) {
-			callback(data);
+			var dataList = data['response']['industries']['industry'], 
+				list = [];
+
+			// Clean up the object, only returning desired attributes of each industry.
+			angular.forEach(dataList, function(item){
+				var industry = {};
+				item = item['@attributes'];
+
+				industry['name'] = item['industry_name'];
+				industry['indivs'] = item['indivs'];
+				industry['pacs'] = item['pacs'];
+				industry['total'] = item['total'];
+
+				list.push(industry);
+			});
+
+			callback(list);
 		});
 	}
 

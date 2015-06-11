@@ -4,7 +4,6 @@
 		
 		<div map-widget state="state"></div>
 		<h3 class="hero__select-header" ng-show="state">Show me reps from 
-<!-- 		<span ng-bind="list.stateName"></span> -->
 			<select class="hero__select-dropdown" ng-model="state">
 				<option value="{{abbrName}}" ng-repeat="(abbrName, fullName) in list.states" ng-bind="fullName" ng-selected="state === abbrName"></option>
 			</select>

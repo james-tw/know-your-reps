@@ -1,23 +1,21 @@
-
-
-
 // CONTROLLERS
 function ListCtrl($scope, $route, $routeParams, $location, openSecrets) {
 	var self = this;
 
-	$scope.state = $routeParams.stateId;
+	self.states = openSecrets.getStates(); ///////change when new state service is built
 
-	self.query = '';
-	self.reps = [];
-	self.states = openSecrets.getStates();
+	$scope.state = $routeParams.stateId;
+	$scope.reps = [];
 
 	$scope.$watch('state', function(val) {
 		if (typeof val !== 'undefined') {
 			// Update full name of state
-			self.stateName = openSecrets.getStateName($scope.state);
+			self.stateName = openSecrets.getStateName(val);
 
 			// Updates list of congresspersons.
-			updateList(val);
+			openSecrets.getRepsByState(val, function(list){
+				$scope.reps = list;
+			});
 			
 			// Changes URL path but doesn't refresh the page.
 			$location.path('/' + val);
@@ -35,105 +33,24 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets) {
     	}
     });
 
-	function updateList(state_id){
-		if (state_id) {
-			openSecrets.getRepsByState(state_id, function(data){
-				self.reps = data.response['legislator'];
-				// self.reps = self.reps.reverse();
-			});
-		}
-	}	
-
-	function updateState() {
-		$scope.state = selectedState;
-	}
-
-	// self.clearSearch = clearSearch;
-
-	// function clearSearch() {
-	// 	self.query = '';
-	// }
 };
 
-function RepPanelCtrl ($scope) {
-	var self = this;
 
-	self.parseOffice = {
-		getTitle: function (code) {
-			//Check the office code for S to indicate Senator.
-			if (code.charAt(2) === 'S') {
-				self.rep = false;
-				return 'Sen.';
-			} 
-			else {
-				self.rep = true;
-				return 'Rep.';
-			}
-		},
-		getDistrict: function(code) {
-			return parseInt(code.slice(2,4), 10);
-		}
-		
-	}
-}
-
-function IndustryCtrl ($scope) {}
-
-
+//TODO: Marge with ListCtrl and then fix the resulting bug where updating $scope.state from the detail page doesn't update the view.
 function DetailCtrl($scope, openSecrets, $routeParams) {
 	var self = this;
 
-	self.repId = $routeParams.repId;
-	self.hasDebt = false;
+	$scope.rep = {};
 
-	// if ($routeParams.repId != null) {
-	//     $scope.rep = $scope.openSecrets($routeParams.repId);
-	// }
+	if ($routeParams.repId != null) {
 
-	openSecrets.getRepSummary(self.repId, function(data){
-		self.summary = data.response['summary']['@attributes'];
-		self.chamber = getChamber();
-		self.party = getParty();
-		self.name = reverseName(self.summary['cand_name']);
-		self.hasDebt = self.summary['debt'] > 0 ? true : false;
-	});
+		openSecrets.getRepSummary($routeParams.repId, function(data){
+			$scope.rep = data;
+		});
 
-	openSecrets.getRepIndustry(self.repId, function(data){
-		self.industries = data.response['industries']['industry'];
-	});
-
-	function reverseName(name) {
-		var namePieces = name.split(' ');
-
-		if (namePieces[namePieces.length - 1] === "Jr" || namePieces[namePieces.length - 1] === "Sr") {
-			var suffix = namePieces.pop();
-		}
-
-		namePieces = namePieces.join(' ').split(',').reverse();
-
-		if (suffix) { namePieces.push(suffix); }
-
-		return namePieces.join(' ');
-	}
-
-	function getChamber() {
-		var chamberId = self.summary['chamber'];
-		if (chamberId === "H") {
-			return "Representative"
-		} else if (chamberId === "S") {
-			return "Senator"
-		}
-	}
-
-	function getParty() {
-		var partyId = self.summary['party'];
-		if (partyId === "R") {
-			return "Republican"
-		} else if (partyId === "D") {
-			return "Democrat"
-		} else {
-			return "Independent"
-		}
+		openSecrets.getRepIndustry($routeParams.repId, function(data){
+			$scope.rep.industries = data;
+		});
 	}
 
 }
