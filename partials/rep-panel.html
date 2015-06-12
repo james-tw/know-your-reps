@@ -1,9 +1,14 @@
-<div class="rep-panel" ng-repeat="rep in reps">
+<div class="rep-panel" ng-repeat="rep in reps | orderBy: [isMyDistrict, '-office']">
+	<div class="rep-panel__my-rep" ng-show="isMyRep(rep)">
+		<span class="glyphicon glyphicon-star"></span>
+	</div>
 	<div class="rep-panel__container">
 	
 		<div class="rep-panel__party" ng-class="'party-' + rep['party']">
 			<span ng-bind="rep['party']"></span>
 		</div>
+
+
 
 	    <h1 class="rep-panel__name" >
 	    	<span ng-bind="rep['office']"></span>

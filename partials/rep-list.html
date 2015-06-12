@@ -1,18 +1,19 @@
-<div class="container">
-	<div class="hero">
-		<h1>Know Your Representatives</h1>
-		
-		<div map-widget state="state"></div>
-		<h3 class="hero__select-header" ng-show="state">Show me reps from 
-			<select class="hero__select-dropdown" ng-model="state">
-				<option value="{{abbrName}}" ng-repeat="(abbrName, fullName) in list.states" ng-bind="fullName" ng-selected="state === abbrName"></option>
-			</select>
-		</h3>
-	</div>
-	<div class="rep-list">
-		<div rep-panel></div>
-		<div class="os-logo" ng-show="(list.reps.length > 0)">
-			<a href="http://www.opensecrets.org/"><img ng-src="img/open-secrets-logo.gif" alt="Data Provided by opensecrets.org"></a>
+<div>
+	<page-header></page-header>
+	<div class="container">
+		<div class="hero">
+			<div map-widget state="state"></div>
+			<h3 class="hero__select-header" ng-show="state">Show me reps from 
+				<select class="hero__select-dropdown" ng-model="state">
+					<option value="{{abbrName}}" ng-repeat="(abbrName, fullName) in list.states" ng-bind="fullName" ng-selected="state === abbrName"></option>
+				</select>
+			</h3>
+		</div>
+		<div class="rep-list">
+			<div rep-panel></div>
+			<div class="os-logo" ng-show="(list.reps.length > 0)">
+				<a href="http://www.opensecrets.org/"><img ng-src="img/open-secrets-logo.gif" alt="Data Provided by opensecrets.org"></a>
+			</div>
 		</div>
 	</div>
 </div>

@@ -1,4 +1,12 @@
 // DIRECTIVES
+function pageHeader (){
+	return {
+		restrict: 'EA',
+		templateUrl: 'partials/page-header.html',
+		replace: true
+	};
+}
+
 function repList (){
 	return {
 		restrict: 'EA',
@@ -33,8 +41,8 @@ function mapWidget ($timeout){
         },
 		link: function(scope, elem, attrs) {
 			$('#map').usmap({
-				stateStyles: {fill: '#ADE5C0'},
-				stateHoverStyles: {fill: '#FFC279'},
+				stateStyles: {fill: '#93C5DA'},
+				stateHoverStyles: {fill: '#FFD6A8'},
 				stateHoverAnimation: 180,
 				click: function(event, data) {
 					// Update the $scope.state based on which state is clicked
@@ -47,7 +55,7 @@ function mapWidget ($timeout){
 					$("#map > svg > path").each(function(){
 						$(this).css('fill', '');
 					});
-					$('#' + data.name).css('fill', '#FFC279');
+					$('#' + data.name).css('fill', '#FFD6A8');
 
 				}
 			});

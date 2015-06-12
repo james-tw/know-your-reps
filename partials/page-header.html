@@ -1,0 +1,23 @@
+
+<header class="navbar navbar-default">
+	<div class="navbar-header"><h1 class="navbar-brand">Know Your Representatives</h1></div>
+
+	<div class="navbar-form navbar-right">
+		<span>Find your district&nbsp;</span>
+		<div class="form-group">
+			<button class="btn btn-primary" ng-click="geolocate();"><span class="glyphicon glyphicon-map-marker"></span></button>
+
+			<span>&nbsp;OR&nbsp;</span>
+
+			<div class="input-group">
+				<input class="form-control" type="text" placeholder="Enter Zip Code" ng-model="zip" />
+				<div class="input-group-btn">
+					<button class="btn btn-primary" ng-click="submitZip(zip);"><span class="glyphicon glyphicon-search"></span></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<p class="navbar-right">Your district is <span ng-bind="myDistricts"></span></p>
+	<p class="navbar-right">Your state is <span ng-bind="myState"></span></p>
+</header>

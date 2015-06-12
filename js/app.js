@@ -1,12 +1,14 @@
 (function(){
 
 var repsApp = angular.module('knowYourReps', ['ngRoute'])
+	.directive('pageHeader', pageHeader)
 	.directive('mapWidget', ['$timeout', mapWidget])
 	.directive('repList', repList)
 	.directive('repPanel', repPanel)
 	.directive('repDetailIndustry', repDetailIndustry)
 	.factory('openSecrets', openSecrets)
-	.controller('ListCtrl', ['$scope', '$route', '$routeParams', '$location', 'openSecrets', ListCtrl])
+	.factory('locationService', locationService)
+	.controller('ListCtrl', ['$scope', '$route', '$routeParams', '$location', 'openSecrets', 'locationService', ListCtrl])
 	.controller('DetailCtrl', ['$scope', 'openSecrets', '$routeParams', DetailCtrl])
 	.config(routeConfig)
 	;
@@ -187,5 +189,47 @@ function openSecrets ($http) {
 	};
 }
 
+function locationService ($http) {
+	var key = '49bc7837f5f649c5b0e70b55e84cc722';
+
+	function getDistrict(loc, callback) {
+		if (loc.length === 2) {
+			var location = 'latitude=' + loc[0] + '&longitude=' + loc[1];
+		} else {
+			var location = 'zip=' + loc[0];
+		}
+
+		$http({
+			method: 'GET',
+			url: 'https://congress.api.sunlightfoundation.com/legislators/locate?' + location + '&apikey=' + key,
+			cache: true
+		}).success(function(data) {
+			// If actual ZIP code...
+			if (data['results'].length) {
+				var dataList = data['results'],
+				state = dataList[0]['state'],
+				list = [];
+
+				angular.forEach(dataList, function(item) {
+					var rep = {};
+
+					if (item['district'] !== null) {
+						rep['district'] = item['district'];
+						list.push(rep);
+					}
+				})
+				
+				callback(list, state);
+			} else {
+				alert ('Please enter a valid ZIP code');
+			}
+			
+		});
+	}
+
+	return {
+		getDistrict: getDistrict
+	}
+}
 
 })();

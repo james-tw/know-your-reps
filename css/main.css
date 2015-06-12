@@ -1,9 +1,11 @@
 body {
-  font-family: "Roboto", sans-serif;
-  padding-top: 4em; }
+  font-family: "Roboto", sans-serif; }
   @media screen and (max-width: 550px) {
     body {
       font-size: 10px; } }
+
+header .navbar-brand {
+  font-size: 2em; }
 
 .container {
   padding: 0; }
@@ -68,6 +70,24 @@ body {
     padding: 0; }
   .rep-panel__container {
     padding: 1em 1em 3em; }
+  .rep-panel__my-rep {
+    position: absolute;
+    z-index: 2;
+    top: 30px;
+    right: 0;
+    width: 30px;
+    height: 35px;
+    border: 15px solid #FFC17C;
+    border-bottom: 10px solid transparent;
+    color: #fff; }
+    .rep-panel__my-rep .glyphicon {
+      margin-left: -15px;
+      top: -11px;
+      width: 30px;
+      text-align: center;
+      font-size: 20px; }
+      .rep-panel__my-rep .glyphicon::before {
+        padding-left: 2px; }
   .rep-panel__party {
     position: absolute;
     top: 0;
