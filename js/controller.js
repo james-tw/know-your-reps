@@ -1,20 +1,40 @@
 // CONTROLLERS
 function ListCtrl($scope, $route, $routeParams, $location, openSecrets, locationService) {
-	var self = this;
 
-	self.states = openSecrets.getStates(); ///////change when new state service is built
-
-	$scope.geolocate = geolocate;
-	$scope.getDistrict = getDistrict;
-	$scope.isMyDistrict = isMyDistrict;
-	$scope.isMyRep = isMyRep;
-	$scope.submitZip = submitZip;
-	$scope.position = [];
-	$scope.myDistricts = [];
-	$scope.myState;
+	$scope.states = openSecrets.getStates(); //TODO: change when new state service is built
 
 	$scope.state = $routeParams.stateId;
 	$scope.reps = [];
+	$scope.rep = {};
+
+	$scope.isMyDistrict = isMyDistrict;
+	$scope.isMyRep = isMyRep;
+
+	//Methods related to locationService
+	$scope.submitZip = submitZip;
+	$scope.geolocate = geolocate;
+	$scope.myDistricts = locationService.myDistricts;
+	$scope.myState = locationService.myState;
+	$scope.clearMyLocation = clearMyLocation;
+
+	if ($routeParams.repId) {
+		//Arrived on a detail page. Perform appropriate AJAX calls.
+		openSecrets.getRepSummary($routeParams.repId, function(data){
+			$scope.rep = data;
+		});
+
+		openSecrets.getRepIndustry($routeParams.repId, function(data){
+			$scope.rep.industries = data;
+		});
+	}
+
+	// Watch when myState is updated by the locationService, then show that state & click it on the map.
+	// $scope.$watch('myState', function(val) {
+	// 	if (val.length && $routeParams.stateId) {
+	// 		console.log("Setting state to myState");
+	// 		$scope.state = val[0];
+	// 	}
+	// }, true);
 
 	$scope.$watch('state', function(val) {
 		if (typeof val !== 'undefined') {
@@ -36,74 +56,50 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
 	// Angular watches for a location change (whether it’s accomplished through typing in the location bar, clicking a link or setting the location through  $location.path()). When it senses this change, it broadcasts an event, $locationChangeSuccess, and begins the routing process. What we do is capture the event and reset the route to what it was previously. http://stackoverflow.com/questions/12422611/angularjs-paging-with-location-path-but-no-ngview-reload
 	var lastRoute = $route.current;
     $scope.$on('$locationChangeSuccess', function(event, next, current) {
-    	// If we're not going to a rep detail page, don't refresh.
-    	if ($location.path().indexOf('rep') === -1) {
+    	// TODO: Find a more ideal way to determine if we're moving from a state list page to another state list page. Preferably detecting stateId in the routeParams
+    	// If navigating between rep LIST pages, don't refresh the view.
+    	if (current.indexOf('/rep/') === -1 && next.indexOf('/rep/') === -1) {
 	        $route.current = lastRoute;
     	}
     });
 
     function geolocate() {
-    	if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(pos){
-				$scope.$apply(function(){
+    	$('.geolocator').prop('disabled', true)
+    					.find('span')
+    					.removeClass('glyphicon-map-marker')
+    					.addClass('glyphicon-refresh glyphicon-spin');
 
-					$scope.position = [];
-					$scope.position.push(pos.coords.latitude.toFixed(2));
-					$scope.position.push(pos.coords.longitude.toFixed(2));
+    	locationService.geolocate(function() {
 
-					$scope.getDistrict();
-
-				});
-			});
-		}
+    		//After location found...
+    		$('.geolocator').prop('disabled', false)
+    						.find('span')
+    						.removeClass('glyphicon-refresh glyphicon-spin')
+    						.addClass('glyphicon-map-marker');
+    	}, showMyState);
     }
 
     function submitZip(zip) {
-
-    	$scope.position = [];
-    	$scope.position.push(zip);
-
-    	$scope.getDistrict();
+    	locationService.submitZip(zip, showMyState);
     }
 
-    function getDistrict(){
-		locationService.getDistrict($scope.position, function(data, state) {
-			$scope.myState = state;
-			$scope.myDistricts = [];
-			$scope.state = state;
+    function showMyState () {
+    	$scope.state = $scope.myState[0];
+    }
 
-			angular.forEach(data, function(item) {
-				$scope.myDistricts.push(item['district']);
-			});
-		});
-	}
+    function clearMyLocation () {
+    	$scope.myDistricts.splice(0, $scope.myDistricts.length); 
+    	$scope.myState.splice(0, $scope.myState.length);
+    }
+
+    //Functions used by ng-hide/ng-show directives
 
 	function isMyDistrict(rep) {
-		return ($scope.myDistricts.indexOf(rep['district']) === -1) && ($scope.myState === $scope.state);
+		return ($scope.myDistricts.indexOf(rep['district']) === -1) && ($scope.myState[0] === $scope.state);
 	}
 
 	function isMyRep(rep) {
-		return (!isMyDistrict(rep) || rep['office'] === 'Sen.') && $scope.state === $scope.myState;
+		return (!isMyDistrict(rep) || rep['office'] === 'Sen.') && ($scope.myState[0] === $scope.state);
 	}
 
 };
-
-
-//TODO: Marge with ListCtrl and then fix the resulting bug where updating $scope.state from the detail page doesn't update the view.
-function DetailCtrl($scope, openSecrets, $routeParams) {
-	var self = this;
-
-	$scope.rep = {};
-
-	if ($routeParams.repId != null) {
-
-		openSecrets.getRepSummary($routeParams.repId, function(data){
-			$scope.rep = data;
-		});
-
-		openSecrets.getRepIndustry($routeParams.repId, function(data){
-			$scope.rep.industries = data;
-		});
-	}
-
-}

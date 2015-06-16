@@ -51,19 +51,23 @@ function mapWidget ($timeout){
 						scope.$apply();
 					})
 
-					// Un-color all states, then color the one that was clicked.
-					$("#map > svg > path").each(function(){
-						$(this).css('fill', '');
-					});
-					$('#' + data.name).css('fill', '#FFD6A8');
+					$(this).trigger('colorize', [data.name]);
 
 				}
+			})
+			.on('colorize', function(event, state) {
+				// Un-color all states...
+				$("#map > svg > path").each(function(){
+					$(this).css('fill', '');
+				});
+				// then color the one that was clicked.
+				$('#' + state).css('fill', '#FFD6A8');
 			});
 		},
 		controller: function($scope, $routeParams, $timeout) {
 
 			$scope.$watch('state', function(val) {
-				$('[data-hit=' + val + ']').trigger('click');
+				$('[data-hit=' + val + ']').trigger('colorize', [val]);
 			});
 
 		}

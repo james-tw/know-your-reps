@@ -9,7 +9,6 @@ var repsApp = angular.module('knowYourReps', ['ngRoute'])
 	.factory('openSecrets', openSecrets)
 	.factory('locationService', locationService)
 	.controller('ListCtrl', ['$scope', '$route', '$routeParams', '$location', 'openSecrets', 'locationService', ListCtrl])
-	.controller('DetailCtrl', ['$scope', 'openSecrets', '$routeParams', DetailCtrl])
 	.config(routeConfig)
 	;
 
@@ -20,18 +19,15 @@ function routeConfig($routeProvider, $httpProvider) {
 	$routeProvider
 		.when('/:stateId', {
 			templateUrl: 'partials/rep-list.html',
-			controller: 'ListCtrl',
-			controllerAs: 'list'
+			controller: 'ListCtrl'
 		})
 		.when('/rep/:repId', {
 			templateUrl: 'partials/rep-detail.html',
-			controller: 'DetailCtrl',
-			controllerAs: 'rep'
+			controller: 'ListCtrl'
 		})
 		.when('/', {
 			templateUrl: 'partials/rep-list.html',
-			controller: 'ListCtrl',
-			controllerAs: 'list'
+			controller: 'ListCtrl'
 		})
 		.otherwise({
 			redirectTo: '/'
@@ -192,11 +188,54 @@ function openSecrets ($http) {
 function locationService ($http) {
 	var key = '49bc7837f5f649c5b0e70b55e84cc722';
 
-	function getDistrict(loc, callback) {
-		if (loc.length === 2) {
-			var location = 'latitude=' + loc[0] + '&longitude=' + loc[1];
+	var position = [];
+
+	var myDistricts = [];
+	var myState = [];
+
+	function geolocate(styleCallback, callback) {
+    	if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(pos){
+
+				//Clear previous position, then set new position.
+				position.splice(0, position.length);
+				position.push(pos.coords.latitude.toFixed(2));
+				position.push(pos.coords.longitude.toFixed(2));
+
+				getDistrict(callback);
+
+				//Callback resets button styles and re-enables button
+				styleCallback();
+
+			},
+			function(err) {
+				//Callback resets button styles and re-enables button
+				styleCallback();
+
+				if (err.code === 3) {
+					alert("Couldn't find your location in a reasonable amount of time. Try using your ZIP code.")
+				}
+
+				
+			}, {timeout: 5000});
+		}
+    }
+
+    function submitZip(zip, callback) {
+
+    	//Clear previous position, then set new position.
+    	position.splice(0, position.length);
+    	position.push(zip);
+
+    	getDistrict(callback);
+    }
+
+
+	function getDistrict(callback) {
+		if (position.length === 2) {
+			var location = 'latitude=' + position[0] + '&longitude=' + position[1];
 		} else {
-			var location = 'zip=' + loc[0];
+			var location = 'zip=' + position[0];
 		}
 
 		$http({
@@ -206,20 +245,20 @@ function locationService ($http) {
 		}).success(function(data) {
 			// If actual ZIP code...
 			if (data['results'].length) {
-				var dataList = data['results'],
-				state = dataList[0]['state'],
-				list = [];
+				var dataList = data['results'];
+				//Clear myDistricts array without re-assigning to a new array.
+				myDistricts.splice(0, myDistricts.length);
+				//Set myState to the state of the first returned Rep. (All reps have the same State value)
+				myState[0] = dataList[0]['state'];
 
 				angular.forEach(dataList, function(item) {
-					var rep = {};
-
 					if (item['district'] !== null) {
-						rep['district'] = item['district'];
-						list.push(rep);
+						myDistricts.push(item['district']);
 					}
-				})
-				
-				callback(list, state);
+				});
+
+				//Sends a callback to controller to set $scope.state = myState
+				callback();
 			} else {
 				alert ('Please enter a valid ZIP code');
 			}
@@ -228,7 +267,12 @@ function locationService ($http) {
 	}
 
 	return {
-		getDistrict: getDistrict
+		getDistrict: getDistrict,
+		submitZip: submitZip,
+		geolocate: geolocate,
+		myDistricts: myDistricts,
+		myState: myState
+
 	}
 }
 

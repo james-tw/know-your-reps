@@ -1,7 +1,7 @@
 <div>
 	<page-header></page-header>
 	<div class="rep-detail container">
-
+		<a class="rep-detail__back" ng-href="#/{{rep['state']}}"><span class="glyphicon glyphicon-arrow-left"></span> Back to <span ng-bind="rep['state']"></span></a>
 		<div class="rep-detail__header">
 			<h1 ng-bind="rep['fullName']"></h1>
 			<h2><span ng-bind="rep['chamber']"></span> - <a ng-href="#/{{rep['state']}}"><span ng-bind="rep['state']"></span></a></h2>
@@ -53,7 +53,7 @@
 
 		<div class="rep-detail__links">
 			<h3>More Information</h3>
-			<a ng-href="https://www.google.com/search?q={{rep['fullName']}}&sitesearch=OnTheIssues.org"><span ng-bind="rep.name"></span> On The Issues</a>
+			<a ng-href="https://www.google.com/search?q={{rep['fullName']}}&sitesearch=OnTheIssues.org"><span ng-bind="rep['fullName']"></span> On The Issues</a>
 		</div>
 	</div>
 
