@@ -9,6 +9,10 @@
 	margin-left: -2px;
 }
 
+.form-control {
+	border: 1px solid #fff;
+}
+
 @-webkit-keyframes spin2 {
     from { -webkit-transform: rotate(0deg);}
     to { -webkit-transform: rotate(360deg);}
@@ -25,6 +29,12 @@ body {
 
 	@media screen and (max-width: 550px) {
 		font-size: 12px;
+	}
+}
+
+.dt-only {
+	@media screen and (max-width: 550px) {
+		display: none;
 	}
 }
 
@@ -61,6 +71,23 @@ body {
 	font-size: 1em;
 	line-height: 3.75;
 
+	.btn {
+		background-color: #FD6C59;
+		border-color: #FD6C59;
+		color: #fff;
+
+		&:link, &:visited, &:hover, &:active {
+
+			background-color: #E86251;
+			border-color: #E86251;
+		}
+
+		&[disabled] {
+			background-color: #E86251 !important;
+			border-color: #E86251 !important;
+		}
+	}
+
 	&__container {
 		display: inline-block;
 		width: 100%;
@@ -71,6 +98,14 @@ body {
 		display: inline-table;
 		max-width: 160px;
 		vertical-align: middle;
+
+		@media (max-width: 550px) {
+			max-width: 145px;
+		}
+		
+		input {
+			font-size: 1em;
+		}
 	}
 }
 .locator {
@@ -141,6 +176,13 @@ body {
 
 .hero {
 	text-align: center;
+	padding: 0 1%;
+
+
+	h1 {
+		font-size: 2.75em;
+		line-height: 1;
+	}
 
 	&__message {
 		max-width: 630px;
@@ -149,6 +191,10 @@ body {
 
 	&__select-header {
 		font-size: 2em;
+
+		@media (max-width: 550px) {
+			font-size: 1.4em;
+		}
 	}
 
 	&__select-dropdown {
@@ -156,6 +202,10 @@ body {
 		background: none;
 		padding: 1em 0px;
 		margin-top: -3px;
+
+		@media (max-width: 550px) {
+			margin-top: 3px;
+		}
 	}
 }
 
@@ -182,7 +232,7 @@ body {
 	margin: 10px 1%;
 	background: #fffef7;
 	color: #272822;
-	box-shadow: 0px 3px 3px -3px;
+	box-shadow: 0px 2px 3px -2px;
 
 	@media screen and (max-width: 992px) {
 		width: 48%;
@@ -300,10 +350,6 @@ body {
 		}
 	}
 
-	hr {
-		margin: 10px 0 15px;
-	}
-
 	&__back {
 		display: inline-block;
 		font-size: 1.5rem;
@@ -320,7 +366,6 @@ body {
 				margin: 0 6px 0 -6px;
 			}
 		}
-
 		
 	}
 
@@ -379,7 +424,6 @@ body {
 		-webkit-flex-flow: row wrap;
 		justify-content: flex-start;
 
-		// Maybe on each section. Could combine with overflow:hidden on rep-detail to hide sides
 		box-shadow: 0px -2px 2px #ccc;
 
 		h3 {
@@ -416,7 +460,6 @@ body {
 		padding: 1em;
 		text-align: center;
 		position: relative;
-		// background: whitesmoke;
 
 		&::after, &::before {
 			position: absolute;
@@ -437,7 +480,7 @@ body {
 		}
 
 		h4 {
-			font-size: 1.25em;
+			font-size: 1em;
 			margin: 0 0 5px;
 		}
 
@@ -453,6 +496,10 @@ body {
 .finance {
 	width: 50%;
 
+	@media screen and (max-width: 500px) {
+		width: 100%;
+	}
+
 	&__header {
 		font-size: 1.5em;
 		margin: 0 0 0.15rem;
@@ -461,6 +508,7 @@ body {
 	}
 	&__figure {
 		font-size: 2em;
+		margin-bottom: 0.25em;
 
 		&--debt {
 			color: #FD6C59;
@@ -489,11 +537,9 @@ body {
 
 
 	&__header {
-
 		font-size: 1.25em;
 		margin: 0 0 0.5rem;
 		color: #666;
-
 	}
 
 	&__pct-of-total{

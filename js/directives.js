@@ -73,3 +73,18 @@ function mapWidget ($timeout){
 		}
 	};
 }
+
+// Calls passed function on keyUp enter event.
+function onEnter() {
+	return function (scope, elem, attrs) {
+		elem.bind("keyup", function(event) {
+			if (event.which === 13) {
+				scope.$apply(function() {
+					scope.$eval(attrs.onEnter);
+				});
+
+				event.preventDefault();
+			}
+		});
+	}
+}

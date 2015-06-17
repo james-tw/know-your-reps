@@ -6,6 +6,7 @@ var repsApp = angular.module('knowYourReps', ['ngRoute'])
 	.directive('repList', repList)
 	.directive('repPanel', repPanel)
 	.directive('repDetailIndustry', repDetailIndustry)
+	.directive('onEnter', onEnter)
 	.factory('openSecrets', openSecrets)
 	.factory('locationService', locationService)
 	.controller('ListCtrl', ['$scope', '$route', '$routeParams', '$location', 'openSecrets', 'locationService', ListCtrl])
@@ -216,7 +217,6 @@ function locationService ($http) {
 					alert("Couldn't find your location in a reasonable amount of time. Try using your ZIP code.")
 				}
 
-				
 			}, {timeout: 5000});
 		}
     }

@@ -64,7 +64,7 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
     });
 
     function geolocate() {
-    	$('.geolocator').prop('disabled', true)
+    	$('.location-form__geolocator').prop('disabled', true)
     					.find('span')
     					.removeClass('glyphicon-map-marker')
     					.addClass('glyphicon-refresh glyphicon-spin');
@@ -72,7 +72,7 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
     	locationService.geolocate(function() {
 
     		//After location found...
-    		$('.geolocator').prop('disabled', false)
+    		$('.location-form__geolocator').prop('disabled', false)
     						.find('span')
     						.removeClass('glyphicon-refresh glyphicon-spin')
     						.addClass('glyphicon-map-marker');

@@ -5,6 +5,9 @@
 .glyphicon:not(.glyphicon-spin):before {
   margin-left: -2px; }
 
+.form-control {
+  border: 1px solid #fff; }
+
 @-webkit-keyframes spin2 {
   from {
     -webkit-transform: rotate(0deg); }
@@ -29,6 +32,10 @@ body {
   @media screen and (max-width: 550px) {
     body {
       font-size: 12px; } }
+
+@media screen and (max-width: 550px) {
+  .dt-only {
+    display: none; } }
 
 .header {
   padding: 0 1%;
@@ -55,6 +62,16 @@ body {
   margin: 0;
   font-size: 1em;
   line-height: 3.75; }
+  .location-form .btn {
+    background-color: #FD6C59;
+    border-color: #FD6C59;
+    color: #fff; }
+    .location-form .btn:link, .location-form .btn:visited, .location-form .btn:hover, .location-form .btn:active {
+      background-color: #E86251;
+      border-color: #E86251; }
+    .location-form .btn[disabled] {
+      background-color: #E86251 !important;
+      border-color: #E86251 !important; }
   .location-form__container {
     display: inline-block;
     width: 100%;
@@ -63,6 +80,11 @@ body {
     display: inline-table;
     max-width: 160px;
     vertical-align: middle; }
+    @media (max-width: 550px) {
+      .location-form__zip {
+        max-width: 145px; } }
+    .location-form__zip input {
+      font-size: 1em; }
 
 .locator {
   font-size: 1.5em; }
@@ -118,17 +140,27 @@ body {
       display: none; } }
 
 .hero {
-  text-align: center; }
+  text-align: center;
+  padding: 0 1%; }
+  .hero h1 {
+    font-size: 2.75em;
+    line-height: 1; }
   .hero__message {
     max-width: 630px;
     margin: 0 auto 10px; }
   .hero__select-header {
     font-size: 2em; }
+    @media (max-width: 550px) {
+      .hero__select-header {
+        font-size: 1.4em; } }
   .hero__select-dropdown {
     border: 1px solid #C7D3DD;
     background: none;
     padding: 1em 0px;
     margin-top: -3px; }
+    @media (max-width: 550px) {
+      .hero__select-dropdown {
+        margin-top: 3px; } }
 
 .os-logo {
   width: 100%;
@@ -152,7 +184,7 @@ body {
   margin: 10px 1%;
   background: #fffef7;
   color: #272822;
-  box-shadow: 0px 3px 3px -3px; }
+  box-shadow: 0px 2px 3px -2px; }
   @media screen and (max-width: 992px) {
     .rep-panel {
       width: 48%; } }
@@ -241,8 +273,6 @@ body {
     .rep-detail .progress .progress-bar {
       font-size: 1em;
       line-height: 2em; }
-  .rep-detail hr {
-    margin: 10px 0 15px; }
   .rep-detail__back {
     display: inline-block;
     font-size: 1.5rem;
@@ -343,7 +373,7 @@ body {
       content: "}";
       right: -20px; }
     .rep-detail .industry-key h4 {
-      font-size: 1.25em;
+      font-size: 1em;
       margin: 0 0 5px; }
     .rep-detail .industry-key .progress {
       max-width: 300px;
@@ -351,12 +381,16 @@ body {
 
 .finance {
   width: 50%; }
+  @media screen and (max-width: 500px) {
+    .finance {
+      width: 100%; } }
   .finance__header {
     font-size: 1.5em;
     margin: 0 0 0.15rem;
     color: #666; }
   .finance__figure {
-    font-size: 2em; }
+    font-size: 2em;
+    margin-bottom: 0.25em; }
     .finance__figure--debt {
       color: #FD6C59; }
 
