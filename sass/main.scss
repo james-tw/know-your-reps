@@ -77,7 +77,6 @@ body {
 		color: #fff;
 
 		&:link, &:visited, &:hover, &:active {
-
 			background-color: #E86251;
 			border-color: #E86251;
 		}
@@ -134,13 +133,16 @@ body {
 			border-bottom: 20px solid transparent;
 		}
 
-		&-text {
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			text-align: center;
-		}
+		
+	}
+
+	&__banner-text {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		text-align: center;
+		text-shadow: #666 0px 1px 2px;
 	}
 
 	&__close {
