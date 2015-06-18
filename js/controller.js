@@ -32,6 +32,8 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
 
     $scope.$watch('state', function(val) {
         if (typeof val !== 'undefined') {
+            // Clear list of reps
+            $scope.reps.splice(0, $scope.reps.length);
             // Update full name of state
             self.stateName = openSecrets.getStateName(val);
 
