@@ -36,7 +36,7 @@ function routeConfig($routeProvider, $httpProvider) {
 }
 
 // SERVICES
-function openSecrets ($http) {
+function openSecrets ($http, $q) {
 
 	var key = 'e083ad78821ccd23756c34c26b0713ff';
 	var states = {
@@ -98,7 +98,9 @@ function openSecrets ($http) {
 	}
 
 
-	function getRepsByState(state, callback) {
+	function getRepsByState(state) {
+		var defer = $q.defer();
+
 		$http({
 			method: 'GET',
 			url: 'http://www.opensecrets.org/api/?method=getLegislators&output=json&id=' + state + '&apikey=' + key,
@@ -122,11 +124,17 @@ function openSecrets ($http) {
 				list.push(rep);
 			});
 
-			callback(list);
+			defer.resolve(list);
+		}).error(function(err, status){
+			defer.reject(err);
 		});
+
+		return defer.promise;
 	}
 
-	function getRepSummary(cid, callback) {
+	function getRepSummary(cid) {
+		var defer = $q.defer();
+
 		$http({
 			method: 'GET',
 			url: 'http://www.opensecrets.org/api/?method=candSummary&output=json&cid=' + cid + '&apikey=' + key,
@@ -147,11 +155,19 @@ function openSecrets ($http) {
 			rep['cashOnHand'] = repData['cash_on_hand'];
 			rep['debt'] = repData['debt'];
 
-			callback(rep);
+			defer.resolve(rep);
+			// callback(rep);
+		}).error(function(err, status){
+			console.log(err);
+			defer.reject(err);
 		});
+
+		return defer.promise;
 	}
 
-	function getRepIndustry(cid, callback) {
+	function getRepIndustry(cid) {
+		var defer = $q.defer();
+
 		$http({
 			method: 'GET',
 			url: 'http://www.opensecrets.org/api/?method=candIndustry&output=json&cid=' + cid + '&apikey=' + key,
@@ -173,8 +189,13 @@ function openSecrets ($http) {
 				list.push(industry);
 			});
 
-			callback(list);
+			defer.resolve(list);
+		}).error(function(err, status){
+			console.log(err);
+			defer.reject(err);
 		});
+
+		return defer.promise;
 	}
 
 	return {
@@ -186,7 +207,7 @@ function openSecrets ($http) {
 	};
 }
 
-function locationService ($http) {
+function locationService ($http, $q) {
 	var key = '49bc7837f5f649c5b0e70b55e84cc722';
 
 	var position = [];
@@ -194,7 +215,9 @@ function locationService ($http) {
 	var myDistricts = [];
 	var myState = [];
 
-	function geolocate(styleCallback, callback) {
+	function geolocate(callback) {
+		var defer = $q.defer();
+
     	if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(pos){
 
@@ -203,35 +226,45 @@ function locationService ($http) {
 				position.push(pos.coords.latitude.toFixed(2));
 				position.push(pos.coords.longitude.toFixed(2));
 
-				getDistrict(callback);
-
-				//Callback resets button styles and re-enables button
-				styleCallback();
+				//Once we lookup the district via API, resolve.
+				getDistrict().then(function () {
+					defer.resolve();
+				});
 
 			},
 			function(err) {
-				//Callback resets button styles and re-enables button
-				styleCallback();
-
 				if (err.code === 3) {
 					alert("Couldn't find your location in a reasonable amount of time. Try using your ZIP code.")
 				}
 
+				defer.resolve();
+
 			}, {timeout: 5000});
 		}
+
+		return defer.promise;
     }
 
-    function submitZip(zip, callback) {
+    function submitZip(zip) {
+    	var defer = $q.defer();
 
     	//Clear previous position, then set new position.
     	position.splice(0, position.length);
     	position.push(zip);
 
-    	getDistrict(callback);
+    	getDistrict().then(function(){
+    		defer.resolve();
+    	}, function(err){
+    		defer.reject();
+    	});
+
+    	return defer.promise;
     }
 
 
-	function getDistrict(callback) {
+	function getDistrict() {
+		var defer = $q.defer();
+
 		if (position.length === 2) {
 			var location = 'latitude=' + position[0] + '&longitude=' + position[1];
 		} else {
@@ -258,12 +291,17 @@ function locationService ($http) {
 				});
 
 				//Sends a callback to controller to set $scope.state = myState
-				callback();
+				defer.resolve();
 			} else {
 				alert ('Please enter a valid ZIP code');
+				defer.reject();
 			}
 			
+		}).error(function(err, status){
+			defer.reject();
 		});
+
+		return defer.promise;
 	}
 
 	return {

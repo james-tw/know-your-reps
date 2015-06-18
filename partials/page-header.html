@@ -8,14 +8,14 @@
 			<div class="location-form__container" ng-hide="myDistricts.length">
 				<div class="location-form form-group">
 					<span>Find your district&nbsp;</span>
-					<button class="location-form__geolocator btn" ng-click="geolocate();"><span class="glyphicon glyphicon-map-marker"></span></button>
+					<button class="location-form__geolocator btn" ng-click="geolocate();" ng-disabled="geolocatingInProgress"><span class="glyphicon" ng-class="{'glyphicon-map-marker': !geolocatingInProgress, 'glyphicon-refresh': geolocatingInProgress, 'glyphicon-spin': geolocatingInProgress}"></span></button>
 
 					<span>&nbsp;OR&nbsp;</span>
 
 					<div class="location-form__zip input-group">
 						<input class="form-control" type="text" placeholder="Enter Zip Code" ng-model="zip" on-enter="submitZip(zip)"/>
 						<div class="input-group-btn">
-							<button class="btn" ng-click="submitZip(zip);"><span class="glyphicon glyphicon-search"></span></button>
+							<button class="btn" ng-click="submitZip(zip);"><span class="glyphicon glyphicon-search" ng-disabled="ziplocatingInProgress" ng-class="{'glyphicon-search': !ziplocatingInProgress, 'glyphicon-refresh': ziplocatingInProgress, 'glyphicon-spin': ziplocatingInProgress}"></span></button>
 						</div>
 					</div>
 				</div>
