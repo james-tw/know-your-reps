@@ -169,20 +169,22 @@ body {
 	}
 }
 
+.map-container {
+	/* Better way of hiding map on mobile, given plugin limitations */
+	@media screen and (max-width: 550px) {
+		max-height: 0;
+		overflow: hidden;
+	}
+}
+
 #map {
 	margin: 0 auto;
 	max-width: 100%;
-
-	@media screen and (max-width: 480px) {
-		display: none;
-	}
-
 }
 
 .hero {
 	text-align: center;
 	padding: 0 1%;
-
 
 	h1 {
 		font-size: 2.75em;
@@ -195,7 +197,7 @@ body {
 	}
 
 	&__select-header {
-		font-size: 2em;
+		font-size: 1.5em;
 
 		@media (max-width: 550px) {
 			font-size: 1.4em;
@@ -203,16 +205,13 @@ body {
 	}
 
 	&__select-dropdown {
-		display: inline-block;
-		width: auto;
-		border: 1px solid #C7D3DD;
-		background: none;
-		padding: 1em 0px;
-		margin-top: -3px;
-		font-size: inherit;
+			display: inline-block;
+			width: auto;
+			vertical-align: middle;		
 
 		@media (max-width: 550px) {
 			margin-top: 3px;
+			vertical-align: initial;
 		}
 	}
 }
@@ -434,6 +433,10 @@ body {
 
 		box-shadow: 0px -2px 2px #ccc;
 
+		@media screen and (max-width: 550px) {
+			font-size: 0.75em;
+		}
+
 		h3 {
 			margin: 0 0 2rem;
 			font-size: 2em;
@@ -504,9 +507,9 @@ body {
 .finance {
 	width: 50%;
 
-	@media screen and (max-width: 500px) {
-		width: 100%;
-	}
+	// @media screen and (max-width: 500px) {
+	// 	width: 100%;
+	// }
 
 	&__header {
 		font-size: 1.5em;
@@ -545,7 +548,7 @@ body {
 
 
 	&__header {
-		font-size: 1.25em;
+		font-size: 1em;
 		margin: 0 0 0.5rem;
 		color: #666;
 	}

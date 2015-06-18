@@ -136,12 +136,16 @@ body {
 .money--green {
   color: #26AD4A; }
 
+.map-container {
+  /* Better way of hiding map on mobile, given plugin limitations */ }
+  @media screen and (max-width: 550px) {
+    .map-container {
+      max-height: 0;
+      overflow: hidden; } }
+
 #map {
   margin: 0 auto;
   max-width: 100%; }
-  @media screen and (max-width: 480px) {
-    #map {
-      display: none; } }
 
 .hero {
   text-align: center;
@@ -153,21 +157,18 @@ body {
     max-width: 630px;
     margin: 0 auto 10px; }
   .hero__select-header {
-    font-size: 2em; }
+    font-size: 1.5em; }
     @media (max-width: 550px) {
       .hero__select-header {
         font-size: 1.4em; } }
   .hero__select-dropdown {
     display: inline-block;
     width: auto;
-    border: 1px solid #C7D3DD;
-    background: none;
-    padding: 1em 0px;
-    margin-top: -3px;
-    font-size: inherit; }
+    vertical-align: middle; }
     @media (max-width: 550px) {
       .hero__select-dropdown {
-        margin-top: 3px; } }
+        margin-top: 3px;
+        vertical-align: initial; } }
 
 .os-logo {
   width: 100%;
@@ -343,6 +344,9 @@ body {
         -ms-flex-pack: start;
             justify-content: flex-start;
     box-shadow: 0px -2px 2px #ccc; }
+    @media screen and (max-width: 550px) {
+      .rep-detail__cycle-finances {
+        font-size: 0.75em; } }
     .rep-detail__cycle-finances h3 {
       margin: 0 0 2rem;
       font-size: 2em;
@@ -388,9 +392,6 @@ body {
 
 .finance {
   width: 50%; }
-  @media screen and (max-width: 500px) {
-    .finance {
-      width: 100%; } }
   .finance__header {
     font-size: 1.5em;
     margin: 0 0 0.15rem;
@@ -409,7 +410,7 @@ body {
 .industry__bar:hover .industry__bar--percent {
   display: none; }
 .industry__header {
-  font-size: 1.25em;
+  font-size: 1em;
   margin: 0 0 0.5rem;
   color: #666; }
 .industry__pct-of-total {

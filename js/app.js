@@ -1,5 +1,5 @@
 (function(){
-
+FastClick.attach(document.body);
 var repsApp = angular.module('knowYourReps', ['ngRoute'])
     .directive('pageHeader', pageHeader)
     .directive('mapWidget', ['$timeout', mapWidget])
