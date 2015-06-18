@@ -43,6 +43,9 @@ body {
   color: #fff;
   line-height: 2.5;
   text-align: center; }
+  @media (max-width: 550px) {
+    .header {
+      line-height: 1.5; } }
   .header__title {
     float: left;
     margin: 0;
@@ -104,8 +107,8 @@ body {
     @media (max-width: 550px) {
       .locator__banner {
         width: 6rem;
-        height: 7rem;
-        margin-bottom: -3rem;
+        height: 6rem;
+        margin-bottom: -2rem;
         border: 3rem solid #FFC17C;
         border-bottom: 20px solid transparent; } }
   .locator__banner-text {
@@ -155,10 +158,13 @@ body {
       .hero__select-header {
         font-size: 1.4em; } }
   .hero__select-dropdown {
+    display: inline-block;
+    width: auto;
     border: 1px solid #C7D3DD;
     background: none;
     padding: 1em 0px;
-    margin-top: -3px; }
+    margin-top: -3px;
+    font-size: inherit; }
     @media (max-width: 550px) {
       .hero__select-dropdown {
         margin-top: 3px; } }

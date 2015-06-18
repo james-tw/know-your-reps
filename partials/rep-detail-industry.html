@@ -1,4 +1,4 @@
-<div class="industry" ng-repeat="ind in rep.industries">
+<div class="industry" ng-repeat="ind in repIndustries">
 	<h4 class="industry__header">
 		<span ng-bind="ind['name']"></span>:
 		<span class="money--green" ng-bind="(ind['total'] | currency:'$':0)"></span>

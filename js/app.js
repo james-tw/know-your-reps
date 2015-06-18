@@ -17,9 +17,6 @@ var repsApp = angular.module('knowYourReps', ['ngRoute'])
 //ROUTE CONFIG 
 function routeConfig($routeProvider) {
 
-    // $httpProvider.defaults.useXDomain = true;
-    // delete $httpProvider.defaults.headers.common["X-Requested-With"];
-
     $routeProvider
         .when('/:stateId', {
             templateUrl: 'partials/rep-list.html',

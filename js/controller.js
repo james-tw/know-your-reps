@@ -6,6 +6,7 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
     $scope.state = $routeParams.stateId;
     $scope.reps = [];
     $scope.rep = {};
+    $scope.repIndustries = [];
 
     $scope.isMyDistrict = isMyDistrict;
     $scope.isMyRep = isMyRep;
@@ -19,6 +20,8 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
 
     if ($routeParams.repId) {
         //Arrived on a detail page. Perform appropriate AJAX calls.
+        window.scrollTo(0, 0);
+
         openSecrets.getRepSummary($routeParams.repId)
         .then(function(data){
             $scope.rep = data;
@@ -26,7 +29,7 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
 
         openSecrets.getRepIndustry($routeParams.repId)
         .then(function(data){
-            $scope.rep.industries = data;
+            $scope.repIndustries = data;
         });
     }
 

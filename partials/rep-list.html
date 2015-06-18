@@ -8,7 +8,7 @@
 			<!-- https://books.google.com/books?id=Mc1bdEtBWRYC&pg=PA91&lpg=PA91&dq=americans+can+name+their+senator&source=bl&ots=ZQWytbpdnE&sig=JJ6UmmhXMfAgBO7Cb_yYguSdbHM&hl=en&sa=X&ved=0CEMQ6AEwBWoVChMImOzz0PCUxgIVU-6ACh0nSwD2#v=onepage&q=americans%20can%20name%20their%20senator&f=false -->
 			<div map-widget state="state"></div>
 			<h3 class="hero__select-header" ng-show="state">Show me reps from 
-				<select class="hero__select-dropdown" ng-model="state">
+				<select class="hero__select-dropdown form-control" ng-model="state">
 					<option value="{{abbrName}}" ng-repeat="(abbrName, fullName) in states" ng-bind="fullName" ng-selected="state === abbrName"></option>
 				</select>
 			</h3>
