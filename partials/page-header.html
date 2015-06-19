@@ -8,7 +8,7 @@
 			<div class="location-form__container" ng-hide="myDistricts.length">
 				<div class="location-form form-group">
 					<span>Find your district&nbsp;</span>
-					<button class="location-form__geolocator btn" ng-click="geolocate();" ng-disabled="geolocatingInProgress"><span class="glyphicon" ng-class="{'glyphicon-map-marker': !geolocatingInProgress, 'glyphicon-refresh': geolocatingInProgress, 'glyphicon-spin': geolocatingInProgress}"></span></button>
+					<button class="location-form__geolocator btn" ng-click="geolocate();" ng-disabled="(geolocatingInProgress)"><span class="glyphicon" ng-class="{'glyphicon-map-marker': !geolocatingInProgress, 'glyphicon-refresh': geolocatingInProgress, 'glyphicon-spin': geolocatingInProgress}"></span></button>
 
 					<span>&nbsp;OR&nbsp;</span>
 

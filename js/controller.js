@@ -67,8 +67,8 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
         $scope.geolocatingInProgress = true;
 
         locationService.geolocate()
-        .then(function() {
-            showMyState();
+        .then(showMyState, function(err) {})
+        .finally(function() {
             $scope.geolocatingInProgress = false;
         });
     }
@@ -77,12 +77,7 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
         $scope.ziplocatingInProgress = true;
 
         locationService.submitZip(zip)
-        .then(function () {
-            //success
-            showMyState();
-        }, function(err){
-            //error
-        })
+        .then(showMyState, function(err){})
         .finally(function() {
             $scope.ziplocatingInProgress = false;
         });

@@ -1,9 +1,12 @@
 // COLORS: http://paletton.com/#uid=7050y0kkOvOaXOugpEtp1t1s-nN
+$red: #FD6C59;
+$red-dark: #E86251;
+$blue: #3D80A0;
+$purple: #8467BE;
+$gold: #FFC17C;
+$whitish: #fffef7;
 
-.glyphicon-spin {
-    -animation: spin .7s infinite linear;
-    -webkit-animation: spin2 .7s infinite linear;
-}
+@import "animations.scss";
 
 .glyphicon:not(.glyphicon-spin):before {
 	margin-left: -2px;
@@ -11,16 +14,6 @@
 
 .form-control {
 	border: 1px solid #fff;
-}
-
-@-webkit-keyframes spin2 {
-    from { -webkit-transform: rotate(0deg);}
-    to { -webkit-transform: rotate(360deg);}
-}
-
-@keyframes spin {
-    from { transform: scale(1) rotate(0deg);}
-    to { transform: scale(1) rotate(360deg);}
 }
 
 body {
@@ -40,10 +33,16 @@ body {
 
 .header {
 	padding: 0 1%;
-	background: #3D80A0;
+	background: $blue;
 	color: #fff;
 	line-height: 2.5;
 	text-align: center;
+	width: 100%;
+
+	.page-rep-list & {
+		position: fixed;
+		z-index: 10;
+	}
 
 	@media (max-width: 550px) {
 		line-height: 1.5;
@@ -76,18 +75,18 @@ body {
 	line-height: 3.75;
 
 	.btn {
-		background-color: #FD6C59;
-		border-color: #FD6C59;
+		background-color: $red;
+		border-color: $red;
 		color: #fff;
 
 		&:link, &:visited, &:hover, &:active {
-			background-color: #E86251;
-			border-color: #E86251;
+			background-color: $red-dark;
+			border-color: $red-dark;
 		}
 
 		&[disabled] {
-			background-color: #E86251 !important;
-			border-color: #E86251 !important;
+			background-color: $red-dark !important;
+			border-color: $red-dark !important;
 		}
 	}
 
@@ -125,7 +124,7 @@ body {
 		width: 7rem;
 		height: 8rem;
 		margin-bottom: -3.5rem;
-		border: 3.5rem solid #FFC17C;
+		border: 3.5rem solid $gold;
 		border-bottom: 20px solid transparent;
 		color: #FFF;
 
@@ -133,7 +132,7 @@ body {
 			width: 6rem;
 			height: 6rem;
 			margin-bottom: -2rem;
-			border: 3rem solid #FFC17C;
+			border: 3rem solid $gold;
 			border-bottom: 20px solid transparent;
 		}
 		
@@ -167,6 +166,10 @@ body {
 	&--green {
 		color: #26AD4A;
 	}
+}
+
+.home-content {
+	padding-top: 5em;
 }
 
 .map-container {
@@ -237,7 +240,7 @@ body {
 	position: relative;
 	width: 31.3333333333333%;
 	margin: 10px 1%;
-	background: #fffef7;
+	background: $whitish;
 	color: #272822;
 	box-shadow: 0px 2px 3px -2px;
 
@@ -292,13 +295,13 @@ body {
 		justify-content: center;
 
 		&.party-R {
-			background: #FD6C59;
+			background: $red;
 		}
 		&.party-D {
-			background: #3D80A0;
+			background: $blue;
 		}
 		&.party-I {
-			background: #8467BE;
+			background: $purple;
 		}
 
 		span {
@@ -404,13 +407,13 @@ body {
 		justify-content: flex-end;
 
 		&.party-R {
-			background: #FD6C59;
+			background: $red;
 		}
 		&.party-D {
-			background: #3D80A0;
+			background: $blue;
 		}
 		&.party-I {
-			background: #8467BE;
+			background: $purple;
 		}
 
 		span {

@@ -1,6 +1,10 @@
 <div>
 	<page-header></page-header>
-	<div class="rep-detail container">
+	<div class="loader" ng-class="{'loader--visible': (!rep['fullName'])}" ng-hide="rep['fullName']">
+	  <div class="loader__square loader__square--blue"></div>
+	  <div class="loader__square loader__square--red"></div>
+	</div>
+	<div class="rep-detail container" ng-show="(rep['fullName'])">
 		<a class="rep-detail__back" ng-href="#/{{rep['state']}}"><span class="glyphicon glyphicon-arrow-left"></span> Back to <span ng-bind="rep['state']"></span></a>
 		<div class="rep-detail__header">
 			<h1 ng-bind="rep['fullName']"></h1>

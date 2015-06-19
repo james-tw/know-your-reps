@@ -1,6 +1,7 @@
-<div>
+<div class="page-rep-list">
 	<page-header></page-header>
-	<div class="container">
+	<div class="home-content container">
+
 		<div class="hero">
 			<h1>It's time you knew your representatives.</h1>
 			<p class="hero__message">Only 1 out of 3 Americans can name their U.S. Senators, and only 1 in 4 can name their Representative. This tool will help you learn more about your Congresspersons, including their contact information and where their campaign money comes from. <strong>Use the <span class="dt-only">map or the</span> locator to find your reps.</strong></p>
@@ -15,6 +16,10 @@
 		</div>
 		<div class="rep-list">
 			<div rep-panel></div>
+			<div class="loader" ng-class="{'loader--visible': (reps.length === 0 && state.length)}" ng-hide="(reps.length)">
+			  <div class="loader__square loader__square--blue"></div>
+			  <div class="loader__square loader__square--red"></div>
+			</div>
 			<div class="os-logo" ng-show="(reps.length > 0)">
 				<a href="http://www.opensecrets.org/"><img ng-src="img/open-secrets-logo.gif" alt="Data Provided by opensecrets.org"></a>
 			</div>

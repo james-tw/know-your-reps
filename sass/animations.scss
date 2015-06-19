@@ -1,0 +1,80 @@
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+.glyphicon-spin {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+
+$loader-duration:.6s;
+$ease-in-out:cubic-bezier(0.445, 0.050, 0.550, 0.950);
+$loader-size:40px;
+$loader-size-half:$loader-size/2;
+
+@keyframes loader-rtl{
+  0%{ 
+    transform:translate3d($loader-size-half,$loader-size-half,0);
+    z-index: 1; 
+  }
+  50%{ 
+    transform:translate3d(-$loader-size-half,-$loader-size-half,0); 
+  }
+  100%{ 
+    transform:translate3d($loader-size-half,$loader-size-half,0);
+  }
+}
+@keyframes loader-ltr{
+  0%{ 
+    transform:translate3d(-$loader-size-half,-$loader-size-half,0);
+  }
+  50%{ 
+    transform:translate3d($loader-size-half,$loader-size-half,0);
+  }
+  100%{ 
+    transform:translate3d(-$loader-size-half,-$loader-size-half,0);
+    z-index: 1;
+  }
+}
+
+.loader{
+    margin: 0 auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: $loader-size;
+    height: $loader-size;
+    transform: rotate(-45deg);
+    opacity: 0;
+
+    &--visible {
+    	transition: opacity 0.5s cubic-bezier(1.000, 0.000, 0.000, 1.000);
+    	opacity: 1;
+    }
+  
+	&__square{
+		position: absolute;
+		width: $loader-size;
+		height: $loader-size;
+		opacity: 0.9;
+
+		&--blue{
+			background: $blue;
+			right: 0;
+			bottom: 0;
+			animation: loader-rtl $loader-duration $ease-in-out infinite;
+		}
+		&--red{
+			background: $red;
+			left: 0;
+			top: 0;  
+			animation: loader-ltr $loader-duration $ease-in-out infinite;
+		}
+	}
+}

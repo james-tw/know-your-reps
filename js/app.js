@@ -231,8 +231,11 @@ function locationService ($http, $q) {
                 if (err.code === 3) {
                     alert("Couldn't find your location in a reasonable amount of time. Try using your ZIP code.")
                 }
+                if (err.code === err.PERMISSION_DENIED) {
+                    defer.reject("declined");
+                }
 
-                defer.resolve();
+                defer.reject();
 
             }, {timeout: 5000});
         }
