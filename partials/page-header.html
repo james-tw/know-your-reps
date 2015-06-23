@@ -24,14 +24,14 @@
 			<div class="locator" ng-show="myDistricts.length">
 				<span>Your district is 
 					<div class="locator__banner-container">
-						<div class="locator__banner">
+						<div class="locator__banner" ng-click="showMyState();">
 							<span class="locator__banner-text">
-								<span ng-bind="myState[0]"></span>-<span ng-bind="myDistricts[0]"></span>
+								<span ng-bind="myState[0]"></span>-<span ng-bind="myDistricts[0]"></span><span ng-show="myDistricts.length > 1">*</span>
 							</span>
 						</div>
 					</div>
 				</span>
-				<a class="locator__close" href ng-click="clearMyLocation();">&times;</a>
+				<a class="locator__close" href ng-click="clearMyLocation(); clearCache();">&times;</a>
 
 			</div>
 				

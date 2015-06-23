@@ -2,6 +2,7 @@
 FastClick.attach(document.body);
 var repsApp = angular.module('knowYourReps', ['ngRoute'])
     .directive('pageHeader', pageHeader)
+    .directive('pageFooter', pageFooter)
     .directive('mapWidget', ['$timeout', mapWidget])
     .directive('repList', repList)
     .directive('repPanel', repPanel)
@@ -9,7 +10,8 @@ var repsApp = angular.module('knowYourReps', ['ngRoute'])
     .directive('onEnter', onEnter)
     .factory('openSecrets', openSecrets)
     .factory('locationService', locationService)
-    .controller('ListCtrl', ['$scope', '$route', '$routeParams', '$location', 'openSecrets', 'locationService', ListCtrl])
+    .factory('cacheService', cacheService)
+    .controller('ListCtrl', ['$scope', '$route', '$routeParams', '$location', 'openSecrets', 'locationService', 'cacheService', ListCtrl])
     .config(routeConfig)
     ;
 
@@ -237,7 +239,7 @@ function locationService ($http, $q) {
 
                 defer.reject();
 
-            }, {timeout: 5000});
+            }, {timeout: 5000, maximumAge: 60000});
         }
 
         return defer.promise;
@@ -284,14 +286,14 @@ function locationService ($http, $q) {
 
                 angular.forEach(dataList, function(item) {
                     if (item['district'] !== null) {
-                        myDistricts.push(item['district']);
+                        myDistricts.push(parseInt(item['district']));
                     }
                 });
 
                 //Sends a callback to controller to set $scope.state = myState
                 defer.resolve();
             } else {
-                alert ('Please enter a valid ZIP code');
+                alert('Please enter a valid ZIP code');
                 defer.reject();
             }
             
@@ -310,5 +312,61 @@ function locationService ($http, $q) {
         myState: myState
     };
 }
+
+function cacheService() {
+    var cache = this;
+
+
+    cache.localStoreSupport = function() {
+        try {
+            return 'localStorage' in window && window['localStorage'] !== null;
+        } catch (e) {
+            return false;
+        }
+    },
+    cache.set = function(name,value,days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime()+(days*24*60*60*1000));
+            var expires = "; expires="+date.toGMTString();
+        }
+        else {
+            var expires = "";
+        }
+        if( this.localStoreSupport() ) {
+            localStorage.setItem(name, value);
+        }
+        else {
+            document.cookie = name+"="+value+expires+"; path=/";
+        }
+        return value;
+    },
+    cache.get = function(name) {
+        if( this.localStoreSupport() ) {
+            return localStorage.getItem(name);
+        }
+        else {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+    },
+    cache.del = function(name) {
+        if( this.localStoreSupport() ) {
+            localStorage.removeItem(name);
+        }
+        else {
+            this.set(name,"",-1);
+        }
+    }
+
+    return cache;
+}
+
 
 })();

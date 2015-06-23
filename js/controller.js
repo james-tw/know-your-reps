@@ -1,5 +1,5 @@
 // CONTROLLERS
-function ListCtrl($scope, $route, $routeParams, $location, openSecrets, locationService) {
+function ListCtrl($scope, $route, $routeParams, $location, openSecrets, locationService, cacheService) {
 
     $scope.states = openSecrets.getStates(); //TODO: change when new state service is built
 
@@ -8,15 +8,42 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
     $scope.rep = {};
     $scope.repIndustries = [];
 
+    $scope.clearCache = clearCache;
+    $scope.cachedDistricts = getCache('districts');
+    // cacheService.get('districts') ?
+    //     (cacheService.get('districts').split(',').map(function(v,i,a){ return Number }))
+    //      : [];
+    $scope.cachedState = getCache('state');
+    // cacheService.get('state') ?
+    //     (cacheService.get('state').split(',').map(function(v,i,a){ return Number }))
+    //      : [];
+
+    function getCache (key) {
+        var result = cacheService.get(key);
+        if (result) {
+            result = result.split(',');
+            if (key === 'districts') {
+                return result.map(function (val, i, a) {
+                    return parseInt(val);
+                });
+            }
+            return result;
+        }
+        return [];
+    }
+
     $scope.isMyDistrict = isMyDistrict;
     $scope.isMyRep = isMyRep;
 
     //Methods related to locationService
     $scope.submitZip = submitZip;
     $scope.geolocate = geolocate;
-    $scope.myDistricts = locationService.myDistricts;
-    $scope.myState = locationService.myState;
+    $scope.getDistrict = locationService.getDistrict;
+    $scope.myDistricts = locationService.myDistricts.length ? locationService.myDistricts : ($scope.cachedDistricts || []);
+    $scope.myState = locationService.myState.length ? locationService.myState : ($scope.cachedState || []);
     $scope.clearMyLocation = clearMyLocation;
+    $scope.showMyState = showMyState;
+
 
     if ($routeParams.repId) {
         //Arrived on a detail page. Perform appropriate AJAX calls.
@@ -67,7 +94,15 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
         $scope.geolocatingInProgress = true;
 
         locationService.geolocate()
-        .then(showMyState, function(err) {})
+        .then(function(){
+            $scope.myDistricts = locationService.myDistricts;
+            $scope.myState = locationService.myState;
+
+            $scope.cachedDistricts = cacheService.set('districts', $scope.myDistricts.join(','));
+            $scope.cachedState = cacheService.set('state', $scope.myState.join(','));
+
+            showMyState();
+        }, function(err) {})
         .finally(function() {
             $scope.geolocatingInProgress = false;
         });
@@ -77,7 +112,15 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
         $scope.ziplocatingInProgress = true;
 
         locationService.submitZip(zip)
-        .then(showMyState, function(err){})
+        .then(function(){
+            $scope.myDistricts = locationService.myDistricts;
+            $scope.myState = locationService.myState;
+
+            $scope.cachedDistricts = cacheService.set('districts', $scope.myDistricts.join(','));
+            $scope.cachedState = cacheService.set('state', $scope.myState.join(','));
+
+            showMyState();
+        }, function(err){})
         .finally(function() {
             $scope.ziplocatingInProgress = false;
         });
@@ -88,8 +131,16 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
     }
 
     function clearMyLocation () {
-        $scope.myDistricts.splice(0, $scope.myDistricts.length); 
+        $scope.myDistricts.splice(0, $scope.myDistricts.length);
         $scope.myState.splice(0, $scope.myState.length);
+    }
+
+    function clearCache() {
+        cacheService.del('districts');
+        cacheService.del('state');
+
+        $scope.cachedDistricts = [];
+        $scope.cachedState = [];
     }
 
     //Functions used by ng-hide/ng-show directives

@@ -3,13 +3,11 @@
 		<span class="glyphicon glyphicon-star"></span>
 	</div>
 	<div class="rep-panel__container">
-	
+
 		<div class="rep-panel__party" ng-class="'party-' + rep['party']">
 			<span ng-bind="rep['party']"></span>
 		</div>
-
-
-
+		
 	    <h1 class="rep-panel__name" >
 	    	<span ng-bind="rep['office']"></span>
 	    	<span ng-bind="rep['fullName']"></span>
@@ -23,6 +21,7 @@
 	    	<p>Phone: <span ng-bind="rep['phone']"></span></p>
 	    	<p>Website: <a ng-href="{{rep['website']}}" ng-bind="rep['website']"></a></p>
 	    </div>
+
     </div>
 	<div>
 	    <a class="rep-panel__finance-link" href class="" ng-href="#/rep/{{rep['cid']}}">Finances and More</a>
