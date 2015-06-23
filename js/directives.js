@@ -7,6 +7,14 @@ function pageHeader (){
 	};
 }
 
+function pageFooter (){
+	return {
+		restrict: 'EA',
+		templateUrl: 'partials/page-footer.html',
+		replace: true
+	};
+}
+
 function repList (){
 	return {
 		restrict: 'EA',
