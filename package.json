@@ -1,0 +1,28 @@
+{
+  "name": "know-your-reps",
+  "version": "1.0.0",
+  "description": "Angular App which uses the OpenSecrets.org and Sunlight Foundation's Congress APIs to provide contact and finance information on U.S. Congresspersons.",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-minify-css": "^1.2.0",
+    "gulp-concat-css": "^2.2.0",
+    "gulp-ngmin": "^0.3.0",
+    "gulp-order": "^1.1.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-ng-annotate": "^1.0.0",
+    "gulp-minify-html": "^1.0.3",
+    "gulp-uglify": "^1.2.0"
+  },
+  "devDependencies": {
+    "gulp-connect": "^2.2.0",
+    "gulp-jshint": "^1.11.1",
+    "gulp-sass": "^2.0.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

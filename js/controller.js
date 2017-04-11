@@ -153,4 +153,12 @@ function ListCtrl($scope, $route, $routeParams, $location, openSecrets, location
         return (!isMyDistrict(rep) || rep['office'] === 'Sen.') && ($scope.myState[0] === $scope.state);
     }
 
-};
+}
+ListCtrl.$inject = ["$scope", "$route", "$routeParams", "$location", "openSecrets", "locationService", "cacheService"];
+
+function MapCtrl ($scope) {
+    $scope.$watch('state', function(val) {
+        $('[data-hit=' + val + ']').trigger('colorize', [val]);
+    });
+}
+MapCtrl.$inject = ["$scope"];

@@ -57,7 +57,7 @@ function mapWidget ($timeout){
 					scope.state = data.name;
 					$timeout(function() {
 						scope.$apply();
-					})
+					});
 
 					$(this).trigger('colorize', [data.name]);
 
@@ -72,15 +72,10 @@ function mapWidget ($timeout){
 				$('#' + state).css('fill', '#FFD6A8');
 			});
 		},
-		controller: function($scope, $routeParams, $timeout) {
-
-			$scope.$watch('state', function(val) {
-				$('[data-hit=' + val + ']').trigger('colorize', [val]);
-			});
-
-		}
+		controller: 'MapCtrl'
 	};
 }
+mapWidget.$inject = ["$timeout"];
 
 // Calls passed function on keyUp enter event.
 function onEnter() {
@@ -94,5 +89,5 @@ function onEnter() {
 				event.preventDefault();
 			}
 		});
-	}
+	};
 }

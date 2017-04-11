@@ -3,7 +3,7 @@ FastClick.attach(document.body);
 var repsApp = angular.module('knowYourReps', ['ngRoute'])
     .directive('pageHeader', pageHeader)
     .directive('pageFooter', pageFooter)
-    .directive('mapWidget', ['$timeout', mapWidget])
+    .directive('mapWidget', mapWidget)
     .directive('repList', repList)
     .directive('repPanel', repPanel)
     .directive('repDetailIndustry', repDetailIndustry)
@@ -11,7 +11,8 @@ var repsApp = angular.module('knowYourReps', ['ngRoute'])
     .factory('openSecrets', openSecrets)
     .factory('locationService', locationService)
     .factory('cacheService', cacheService)
-    .controller('ListCtrl', ['$scope', '$route', '$routeParams', '$location', 'openSecrets', 'locationService', 'cacheService', ListCtrl])
+    .controller('ListCtrl', ListCtrl)
+    .controller('MapCtrl', MapCtrl)
     .config(routeConfig)
     ;
 
@@ -36,6 +37,7 @@ function routeConfig($routeProvider) {
             redirectTo: '/'
         });
 }
+routeConfig.$inject = ["$routeProvider"];
 
 // SERVICES
 function openSecrets ($http, $q) {
@@ -43,22 +45,23 @@ function openSecrets ($http, $q) {
     var key = 'e083ad78821ccd23756c34c26b0713ff';
     var states = {
         "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming"
-    }
+    };
 
     function getStateName(abbr) { return states[abbr]; }
 
     function getStates () { return states; }
 
     function reverseName(name) {
-        var namePieces = name.split(' ');
+        var namePieces = name.split(' '),
+            suffix;
 
         if (namePieces[namePieces.length - 1] === "Jr" || namePieces[namePieces.length - 1] === "Sr") {
-            var suffix = namePieces.pop();
+            suffix = namePieces.pop();
         }
 
         namePieces = namePieces.join(' ').split(',').reverse();
 
-        if (suffix) { namePieces.push(suffix); }
+        if (suffix.length) { namePieces.push(suffix); }
 
         return namePieces.join(' ').trim();
     }
@@ -79,19 +82,19 @@ function openSecrets ($http, $q) {
 
     function getChamber(chamberId) {
         if (chamberId === "H") {
-            return "Representative"
+            return "Representative";
         } else if (chamberId === "S") {
-            return "Senator"
+            return "Senator";
         }
     }
 
     function getPartyFull(partyId) {
         if (partyId === "R") {
-            return "Republican"
+            return "Republican";
         } else if (partyId === "D") {
-            return "Democrat"
+            return "Democrat";
         } else {
-            return "Independent"
+            return "Independent";
         }
     }
 
@@ -203,6 +206,7 @@ function openSecrets ($http, $q) {
         getStates: getStates
     };
 }
+openSecrets.$inject = ["$http", "$q"];
 
 function locationService ($http, $q) {
     var key = '49bc7837f5f649c5b0e70b55e84cc722';
@@ -231,7 +235,7 @@ function locationService ($http, $q) {
             },
             function(err) {
                 if (err.code === 3) {
-                    alert("Couldn't find your location in a reasonable amount of time. Try using your ZIP code.")
+                    alert("Couldn't find your location in a reasonable amount of time. Try using your ZIP code.");
                 }
                 if (err.code === err.PERMISSION_DENIED) {
                     defer.reject("declined");
@@ -263,12 +267,13 @@ function locationService ($http, $q) {
 
 
     function getDistrict() {
-        var defer = $q.defer();
+        var defer = $q.defer(),
+            location;
 
         if (position.length === 2) {
-            var location = 'latitude=' + position[0] + '&longitude=' + position[1];
+            location = 'latitude=' + position[0] + '&longitude=' + position[1];
         } else {
-            var location = 'zip=' + position[0];
+            location = 'zip=' + position[0];
         }
 
         $http({
@@ -312,6 +317,7 @@ function locationService ($http, $q) {
         myState: myState
     };
 }
+locationService.$inject = ["$http", "$q"];
 
 function cacheService() {
     var cache = this;
@@ -363,7 +369,7 @@ function cacheService() {
         else {
             this.set(name,"",-1);
         }
-    }
+    };
 
     return cache;
 }
